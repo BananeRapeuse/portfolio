@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Natanaël Eloy - Portfolio</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0a0a0f;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* HEADER */
+    .top-bar {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      right: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .name {
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .avatar {
+      width: 85px;
+      height: 85px;
+      border-radius: 18px;
+      border: 2px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 25px rgba(124,124,255,0.25);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* HERO */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin: 0;
+    }
+
+    .hero p {
+      color: #b3b3b3;
+      margin-top: 10px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      color: #666;
+      font-size: 0.9rem;
+      animation: fade 2s infinite;
+    }
+
+    @keyframes fade {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* CAREER */
+    .career {
+      position: relative;
+      z-index: 1;
+      padding: 120px 20px;
+      text-align: center;
+    }
+
+    .career h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(124,124,255,0.15);
+      transform: translateX(-50%);
+    }
+
+    .job {
+      position: relative;
+      padding: 18px 18px 18px 22px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      transition: 0.3s ease;
+
+      opacity: 0;
+      transform: translateY(25px);
+    }
+
+    .job.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .job:hover {
+      transform: translateX(8px);
+      background: rgba(124,124,255,0.08);
+      border-color: rgba(124,124,255,0.25);
+      box-shadow: 0 0 25px rgba(124,124,255,0.15);
+    }
+
+    .job h3 {
+      margin: 0 0 6px 0;
+    }
+
+    .job p {
+      margin: 0;
+      color: #b3b3b3;
+    }
+
+    .year {
+      font-size: 0.8rem;
+      color: #7c7cff;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .job:hover h3 {
+      color: #7c7cff;
+      text-shadow: 0 0 14px rgba(124,124,255,0.5);
+    }
+
+    /* TOGGLE BUTTON */
+    .toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 10;
+
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+
+    .toggle-btn:hover {
+      background: rgba(124,124,255,0.15);
+      border-color: rgba(124,124,255,0.3);
+    }
+    .projects {
+  position: relative;
+  z-index: 1;
+  padding: 120px 20px;
+  text-align: center;
+}
+
+    .projects-desc {
+  color: #b3b3b3;
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+}
+
+    .projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+    .project-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 18px;
+  backdrop-filter: blur(10px);
+  transition: 0.3s;
+  text-align: left;
+}
+
+    .project-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(124,124,255,0.3);
+  box-shadow: 0 0 25px rgba(124,124,255,0.15);
+}
+
+    .project-card h3 {
+  margin: 0 0 8px 0;
+}
+
+    .project-card p {
+  color: #b3b3b3;
+  font-size: 0.9rem;
+}
+
+    .project-tags {
+  margin: 10px 0;
+}
+
+    .project-tags span {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  margin-right: 5px;
+  border-radius: 6px;
+  background: rgba(124,124,255,0.15);
+  color: #7c7cff;
+}
+
+    .project-card a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #7c7cff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+    .project-card a:hover {
+  text-shadow: 0 0 10px rgba(124,124,255,0.5);
+}
+
+    .projects-btn {
+  display: inline-block;
+  margin-top: 50px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(124,124,255,0.3);
+  color: white;
+  text-decoration: none;
+  background: rgba(124,124,255,0.08);
+  transition: 0.3s;
+}
+
+    .projects-btn:hover {
+  background: rgba(124,124,255,0.2);
+  box-shadow: 0 0 20px rgba(124,124,255,0.2);
+}
+  </style>
+</head>
+
+<body>
+
+<div id="tsparticles"></div>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <div class="name">Natanaël Eloy</div>
+
+  <img class="avatar"
+    src="https://avatars.githubusercontent.com/u/79283690?v=4"
+    alt="avatar"
+  />
+</div>
+
+<button id="toggleParticles" class="toggle-btn">
+  ✨ Fond: ON
+</button>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Boulanger et Développeur sur son temps libre !</h1>
+  <p>Boulanger • Pâtissier • Chocolatier</p>
+  <p>IT • Server management • AI Enthousiast • Gamer</p>
+  <div class="scroll-hint">↓ scroll pour explorer</div>
+</div>
+
+<!-- CAREER -->
+<section class="career">
+  <h2>Parcours professionnel</h2>
+
+  <div class="timeline">
+
+    <div class="job">
+      <span class="year">2021 - 2024</span>
+      <h3>Collège Jean Moulin - Formerie</h3>
+      <p>DNB avec mention Bien</p>
+    </div>
+
+    <div class="job">
+      <span class="year">2024 - 2026</span>
+      <h3>CMA Hauts-de-France - Beauvais</h3>
+      <p>CAP Boulangerie (en cours)</p>
+    </div>
+
+    <div class="job">
+      <span class="year">2026 - 2027</span>
+      <h3>CMA Hauts-de-France - Beauvais</h3>
+      <p>CS Tourier (prévision)</p>
+    </div>
+
+    <div class="job">
+      <span class="year">2027 - 2028</span>
+      <h3>CMA Hauts-de-France - Beauvais</h3>
+      <p>CAP Pâtisserie (prévision)</p>
+    </div>
+
+    <div class="job">
+      <span class="year">2028 - 2030</span>
+      <h3>CMA Hauts-de-France - Compiègne</h3>
+      <p>CAP Chocolatier</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects">
+  <h2>Mes projets</h2>
+
+  <p class="projects-desc">
+    Ici vous pouvez retrouver mes projets personnels, expérimentations et outils développés sur mon temps libre.
+  </p>
+
+  <div class="projects-grid">
+
+    <!-- PROJECT CARD -->
+    <div class="project-card">
+      <h3>XIS</h3>
+      <p>eXtreme Intelligent Scaling | Bicubic upscaler with Frame Generation ! + XIS ZeroFrame Input™ for half of the typical input delay !</p>
+
+      <div class="project-tags">
+        <span>C++</span>
+        <span>HLSL</span>
+        <span>AI</span>
+      </div>
+
+      <a href="https://github.com/BananeRapeuse/XIS" target="_blank">
+        Voir sur GitHub
+      </a>
+    </div>
+
+    <!-- PROJECT CARD -->
+    <div class="project-card">
+      <h3>Nom du projet 2</h3>
+      <p>Autre description (modifie librement)</p>
+
+      <div class="project-tags">
+        <span>Linux</span>
+        <span>Server</span>
+      </div>
+
+      <a href="https://github.com/TON_GITHUB/PROJET" target="_blank">
+        Voir sur GitHub
+      </a>
+    </div>
+
+  </div>
+
+  <!-- BUTTON PAGE PROJETS -->
+  <a href="projects.html" class="projects-btn">
+    🚀 Voir tous mes projets
+  </a>
+</section>
+
+<script>
+let particlesInstance = null;
+let particlesOn = true;
+
+function loadParticles() {
+  tsParticles.load("tsparticles", {
+    background: { color: "#0a0a0f" },
+
+    fpsLimit: 480,
+
+    interactivity: {
+      events: {
+        onHover: { enable: true, mode: "grab" },
+        onClick: { enable: true, mode: "push" }
+      }
+    },
+
+    particles: {
+      number: {
+        value: 140,
+        density: { enable: true, area: 800 }
+      },
+
+      color: {
+        value: ["#7c7cff", "#4cc9f0", "#9b5de5"]
+      },
+
+      links: {
+        enable: true,
+        distance: 110,
+        color: "#7c7cff",
+        opacity: 0.55,
+        width: 1.2,
+        shadow: {
+          enable: true,
+          color: "#7c7cff",
+          blur: 8
+        }
+      },
+
+      move: {
+        enable: true,
+        speed: 1.4,
+        random: true,
+        outModes: "out"
+      },
+
+      size: { value: { min: 1, max: 2.5 } },
+      opacity: { value: 0.6, random: true }
+    }
+  }).then(container => {
+    particlesInstance = container;
+  });
+}
+
+loadParticles();
+
+document.getElementById("toggleParticles").addEventListener("click", () => {
+  const canvas = document.querySelector("#tsparticles canvas");
+
+  if (!canvas) return;
+
+  if (particlesOn) {
+    canvas.style.display = "none";
+    particlesOn = false;
+    document.getElementById("toggleParticles").innerText = "✨ Fond: OFF";
+  } else {
+    canvas.style.display = "block";
+    particlesOn = true;
+    document.getElementById("toggleParticles").innerText = "✨ Fond: ON";
+  }
+});
+
+/* SCROLL ANIMATION */
+window.addEventListener("load", () => {
+  const jobs = document.querySelectorAll(".job");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  jobs.forEach(job => observer.observe(job));
+});
+</script>
+
+</body>
+</html>
